@@ -29,7 +29,12 @@ class Repository(object):
     def __init__(self):
         self._conn = sqlite3.connect('bgumart.db')
         self._conn.text_factory = bytes
+        self.employee = Employee(object)
+        self.product = Product(object)
+        
         #TODO: complete
+
+
  
     def _close(self):
         self._conn.commit()
