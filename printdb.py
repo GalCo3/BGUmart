@@ -40,7 +40,7 @@ def main():
     print()
 
     # print detailed employees report
-    print("Employees Report")
+    print("Employees report")
     for employee in Employee.find_all():
         emp_branch = Branch.find(employee[3])
         
@@ -54,11 +54,12 @@ def main():
          """, [employee[0]])
         sales = c.fetchone()
         if sales[0] == None:
-            print("Name: {}, Salary: {}, Works at Branch: {} Total sales: {})".format(employee[1], employee[2], emp_branch[1],0))
+            print("{} {} {} {}".format(employee[1], employee[2], emp_branch[1],0))
         else:
-            print("Name: {}, Salary: {}, Works at Branch: {} Total sales: {})".format(employee[1], employee[2], emp_branch[1],sales[0]))
+            print("{} {} {} {}".format(employee[1], employee[2], emp_branch[1],sales[0]))
     
-    print("Activities Report")
+    print()
+    print("Activities report")
     
     c = repo._conn.cursor()
     c.execute("""
