@@ -22,6 +22,8 @@ def row_map(row, col_mapping, dto_type):
     return dto_type(*ctor_args)
 
 
+
+
 class Dao(object):
     def __init__(self, dto_type, conn):
         self._conn = conn
@@ -32,7 +34,7 @@ class Dao(object):
 
     def insert(self, dto_instance):
         ins_dict = vars(dto_instance)
-
+        
         column_names = ','.join(ins_dict.keys())
         params = list(ins_dict.values())
         qmarks = ','.join(['?'] * len(ins_dict))
@@ -47,7 +49,7 @@ class Dao(object):
         c.execute('SELECT * FROM {}'.format(self._table_name))
         return orm(c, self._dto_type)
     
-    def find(self, **keyvals):
+    def find(self, *args, **keyvals):
         column_names = keyvals.keys()
         params = list(keyvals.values())
  

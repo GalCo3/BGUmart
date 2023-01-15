@@ -4,33 +4,92 @@ from dbtools import Dao
  
 # Data Transfer Objects:
 class Employee(object):
-    #TODO: implement
-    pass
- 
+    def __init__(self, id: int, name: str, salary: float, branche: int):
+        self.id = id
+        self.name = name
+        self.salary = salary
+        self.branche = branche
+    
+    def find_all():
+        c = repo._conn.cursor()
+        c.execute("""
+             SELECT * FROM employees
+             ORDER By name
+         """)
+        # return Product(*c.fetchall())
+        return c.fetchall()
+
 class Supplier(object):
-    #TODO: implement
-    pass
+    def __init__(self, id: int, name: str, contact_information: str):
+        self.id = id
+        self.name = name
+        self.contact_information = contact_information
 
 class Product(object):
-    #TODO: implement
-    pass
+    def __init__(self, id: int, description: str, price: float, quantity: int):
+        self.id = id
+        self.description = description
+        self.price = price
+        self.quantity = quantity
 
-class Branche(object):
-    #TODO: implement
-    pass
+    def find(product_id):
+         c = repo._conn.cursor()
+         c.execute("""
+             SELECT * FROM products WHERE id = ?
+         """, [product_id])
+         return Product(*c.fetchone())
+    
+    def update(id,quantity):
+        repo._conn.execute("""
+               UPDATE products SET quantity=(?) WHERE id=(?)
+           """, [quantity,id])
 
-class Activitie(object):
-    #TODO: implement
-    pass
- 
+class Branch(object):
+    def __init__(self, id: int, location: str, number_of_employees: int):
+        self.id = id
+        self.location = location
+        self.number_of_employees = number_of_employees
+
+    def find(id):
+        c = repo._conn.cursor()
+        c.execute("""
+             SELECT * FROM branches WHERE id = ?
+         """, [id])
+        return c.fetchone()
+
+
+class Activity(object):
+    def __init__(self, product_id: int, quantity: int, activator_id: int, date: str):
+        self.product_id = product_id
+        self.quantity = quantity
+        self.activator_id = activator_id
+        self.date = date
+
+    def insert(product_id,quantity,activator_id,date):
+         repo._conn.execute("""
+             INSERT INTO activities (product_id, quantity, activator_id,date ) VALUES (?, ?, ?, ?)
+         """, [product_id, quantity,activator_id,date])
+
+    def find_all():
+        c = repo._conn.cursor()
+        c.execute("""
+             SELECT * FROM activities
+             order by date
+         """)
+        # return Product(*c.fetchall())
+        return c.fetchall()
  
 #Repository
 class Repository(object):
     def __init__(self):
         self._conn = sqlite3.connect('bgumart.db')
-        self._conn.text_factory = bytes
-        self.employee = Employee(object)
-        self.product = Product(object)
+        self._conn.text_factory = str #str
+        self.employees = Dao(Employee,self._conn)
+        self.supplieres = Dao(Supplier,self._conn)
+        self.products = Dao(Product,self._conn)
+        self.branches = Dao(Branch,self._conn)
+        self.activities = Dao(Activity,self._conn)
+        self.activities._table_name = "activities"
         
         #TODO: complete
 
